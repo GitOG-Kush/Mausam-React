@@ -1,21 +1,30 @@
 import React from 'react'
 import { BsSearch } from "react-icons/bs"
 
-export default function Input() {
+export default function Input(props) {
+  let { fetchData, setCity, setUnit } = props;
+
+  const keyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      fetchData();
+    }
+  }
+
   return (
     <div className='container my-3'>
       <ul className="nav justify-content-center">
         <li className="nav-item me-2">
-          <form className="d-flex" role="search">
-            <input className="form-control me-2" type="search" placeholder="Enter City" aria-label="Search" />
-            <button className="btn btn-outline-success" type="submit"><BsSearch/></button>
+          <form className="d-flex">
+            <input className="form-control me-2" onChange={(e) => setCity(e.target.value)} onKeyDown={keyDown} type="text" placeholder="Enter City" />
+            <button className="btn btn-outline-success" onClick={fetchData} type="button"><BsSearch /></button>
           </form>
         </li>
         <li className="nav-item">
-          <button type="button" className="btn btn-primary me-2">&deg;C</button>
+          <button type="button" onClick={() => setUnit('metric')} className="btn btn-primary me-2">&deg;C</button>
         </li>
         <li className="nav-item">
-          <button type="button" className="btn btn-primary">&deg;F</button>
+          <button type="button" onClick={() => setUnit('imperial')} className="btn btn-primary">&deg;F</button>
         </li>
       </ul>
     </div>
