@@ -1,39 +1,49 @@
 import React from 'react'
 import { DateTime } from 'luxon';
+import { BsDroplet, BsDropletFill, BsDropletHalf, BsSunFill, BsMoonStarsFill, BsThermometerHalf, BsWind } from "react-icons/bs"
 
 export default function Weather(props) {
+    const { iconCode, condition, currTemp, feelsLike, humid, sunrise, sunset, windSpeed, unit } = props;
+
+    let windUnit = "";
+    if (unit === "metric")
+        windUnit = 'km/h';
+    else if (unit === 'imperial')
+        windUnit = "mph";
 
     function setRiseTime(e) {
-
         let dt = DateTime.fromSeconds(e).toLocaleString({ hour: 'numeric', minute: 'numeric' });
         return dt;
     }
 
-    const { iconCode, condition, currTemp, feelsLike, humid, sunrise, sunset } = props
     const imgUrl = `http://openweathermap.org/img/wn/${iconCode}@2x.png`
     return (
-        <div className='container'>
-            <div className="container d-flex justify-content-center">
-                <div className="d-flex flex-column justify-content-center align-items-center" style={{ width: '33%' }}>
-                    <div className=""><img src={imgUrl} alt="icon" /></div>
-                    <div className="">{condition}</div>
+        <>
+            <div className="C3-G1 d-flex justify-content-between flex-row my-1">
+                <div className="weather conditions d-flex flex-column justify-content-center align-items-center p-1">
+                    <img src={imgUrl} className='mb-1' alt="icon" />
+                    <h3 className="d-flex condition flex-column justify-content-center align-items-center my-1">{condition}</h3>
                 </div>
-                <div className="d-flex flex-column justify-content-center align-items-center" style={{ width: '33%' }}>
-                    <div className="">{currTemp}&deg;</div>
-                </div>
-                <div className="d-flex flex-column justify-content-center" style={{ width: '33%' }}>
-                    <div className="">
-                        <i className='uil uil-sun'>
-                        </i>
-                        {feelsLike}&deg;
+
+                <h1 className='weather currtemp d-flex flex-column justify-content-center align-items-center ms-5 my-0 p-1'>{currTemp}&deg;</h1>
+
+                <div className="weather feels d-flex flex-column justify-content-center p-1" >
+                    <div className='feel d-flex align-items-center p-1'>
+                        {<BsThermometerHalf className='me-2' />} <span className='me-1'>Feels like:</span> {feelsLike}&deg;
                     </div>
-                    <div className="">{humid}%</div>
+                    <div className='feel d-flex align-items-center p-1'>
+                        {humid <= 40 ? <BsDroplet className='me-2' /> : humid > 40 && humid <= 70 ? <BsDropletHalf className='me-2' /> : <BsDropletFill className='me-2' />} <span className='me-1'>Humidity:</span> {humid}%
+                    </div>
+                    <div className='feel d-flex align-items-center p-1'>
+                        {<BsWind className='me-2' />} <span className='me-1'>Wind Speed:</span> {windSpeed} {windUnit}
+                    </div>
                 </div>
             </div>
-            <div className="container d-flex justify-content-center">
-                <div className="col">{setRiseTime(sunrise)}</div>
-                <div className="col">{setRiseTime(sunset)}</div>
+            <hr />
+            <div className="d-flex rise-set justify-content-evenly my-1">
+                <div className=""><BsSunFill className='me-1' /> {setRiseTime(sunrise)}</div>
+                <div className=""><BsMoonStarsFill className='me-1'/> {setRiseTime(sunset)}</div>
             </div>
-        </div>
+        </>
     )
 }

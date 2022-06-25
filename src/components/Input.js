@@ -2,7 +2,7 @@ import React from 'react'
 import { BsSearch } from "react-icons/bs"
 
 export default function Input(props) {
-  let { setData, fetchData, setCity, setUnit } = props;
+  let { setData, fetchData, setCity, setUnit, setUnitChanged } = props;
 
   const keyDown = (e) => {
     if (e.key === 'Enter') {
@@ -13,13 +13,19 @@ export default function Input(props) {
   }
 
   const btnClick = () => {
-    setData(null); 
+    setData(null);
     fetchData();
   }
 
+  const handleUnitChange = (e) => {
+    // setData(null);
+    setUnitChanged(true);
+    setUnit(e);
+  }
+
   return (
-    <div className='container my-3'>
-      <ul className="nav justify-content-center">
+    <>
+      <ul className="nav C1 mx-3 justify-content-center">
         <li className="nav-item me-2">
           <form className="d-flex">
             <input className="form-control me-2" onChange={(e) => setCity(e.target.value)} onKeyDown={keyDown} type="text" placeholder="Enter City" />
@@ -27,12 +33,16 @@ export default function Input(props) {
           </form>
         </li>
         <li className="nav-item">
-          <button type="button" onClick={() => setUnit('metric')} className="btn btn-primary me-2">&deg;C</button>
-        </li>
-        <li className="nav-item">
-          <button type="button" onClick={() => setUnit('imperial')} className="btn btn-primary">&deg;F</button>
+          <div className="btn-group temperature-units">
+            <input type="radio" defaultChecked className="btn-check" name="btnradio" id="Celsius" autoComplete='off' />
+            <label className="btn btn-outline-dark" htmlFor="Celsius" onClick={() => handleUnitChange('metric')}>&deg;C</label>
+
+            <input type="radio" className="btn-check" name="btnradio" autoComplete="off" id="Fahrenheit" />
+            <label className="btn btn-outline-dark" htmlFor="Fahrenheit" onClick={() => handleUnitChange('imperial')}>&deg;F</label>
+          </div>
         </li>
       </ul>
-    </div>
+      <hr />
+    </>
   )
 }
