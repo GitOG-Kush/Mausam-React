@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Mausam-React/static/css/main.f6731a4a.css",
+    "main.js": "/Mausam-React/static/js/main.769e33c4.js",
+    "static/js/787.eb4491bd.chunk.js": "/Mausam-React/static/js/787.eb4491bd.chunk.js",
+    "index.html": "/Mausam-React/index.html",
+    "main.f6731a4a.css.map": "/Mausam-React/static/css/main.f6731a4a.css.map",
+    "main.769e33c4.js.map": "/Mausam-React/static/js/main.769e33c4.js.map",
+    "787.eb4491bd.chunk.js.map": "/Mausam-React/static/js/787.eb4491bd.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f6731a4a.css",
+    "static/js/main.769e33c4.js"
+  ]
+}
