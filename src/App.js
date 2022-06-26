@@ -4,10 +4,12 @@ import Input from './components/Input'
 import TimeLocation from './components/TimeLocation'
 import Weather from './components/Weather';
 import Loader from './components/Loader';
+import Onecall from './components/Onecall';
 
 function App() {
   const API = process.env.REACT_APP_WEATHER_API;
-  const [data, setData] = useState(null);
+  const [dataWeather, setDataWeather] = useState(null);
+  const [dataOnecall, setDataOnecall] = useState(null);
   const [city, setCity] = useState("Lucknow");
   const [unit, setUnit] = useState("metric");
   const [loading, setLoading] = useState(false);
@@ -16,12 +18,19 @@ function App() {
 
   const fetchData = async () => {
     setLoading(true);
-    let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API}&units=${unit}`;
-    let fetchedData = await fetch(url);
-    let parsedData = await fetchedData.json();
-    setData(parsedData);
+    let urlWeather = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API}&units=${unit}`;
+    let fetchedDataWeather = await fetch(urlWeather);
+    let parsedDataWeather = await fetchedDataWeather.json();
+    setDataWeather(parsedDataWeather);
     setLoading(false);
-    fetchedData.status !== 200 && setDataFor(city);
+    let { coord: { lat, lon } } = parsedDataWeather;
+    console.log(city, lat,lon);
+
+    let urlOnecall = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${API}&units=${unit}`;
+    let fetchedDataOnecall = await fetch(urlOnecall);
+    let parsedDataOnecall = await fetchedDataOnecall.json();
+    setDataOnecall(parsedDataOnecall);
+    fetchedDataWeather.status !== 200 && fetchedDataOnecall.status !== 200 && setDataFor(city);
   }
 
   useEffect(() => {
@@ -31,16 +40,18 @@ function App() {
 
   return (
     <>
-      <Input setData={setData} fetchData={fetchData} setCity={setCity} setUnit={setUnit} setUnitChanged={setUnitChanged} />
-      {loading && unitChanged===false && <Loader />}
+      <Input setDataWeather={setDataWeather} fetchData={fetchData} setCity={setCity} setUnit={setUnit} setUnitChanged={setUnitChanged} />
+      {loading && unitChanged === false && <Loader /> }
       {
-        data && data.cod === 200 ?
-          <>
-            <TimeLocation location={data.name} time={data.dt} />
+        dataWeather && dataWeather.cod === 200 && dataOnecall?
+          <div>
+            <TimeLocation location={dataWeather.name} time={dataWeather.dt} />
 
-            <Weather iconCode={data.weather[0].icon} condition={data.weather[0].main} currTemp={Math.round(data.main.temp)} feelsLike={Math.round(data.main.feels_like)} humid={data.main.humidity} sunrise={data.sys?.sunrise} sunset={data.sys?.sunset} windSpeed={data.wind.speed} unit={unit}/>
+            <Weather iconCode={dataWeather.weather[0].icon} condition={dataWeather.weather[0].main} currTemp={Math.round(dataWeather.main.temp)} feelsLike={Math.round(dataWeather.main.feels_like)} humid={dataWeather.main.humidity} sunrise={dataWeather.sys?.sunrise} sunset={dataWeather.sys?.sunset} windSpeed={dataWeather.wind.speed} unit={unit} />
 
-          </> : (data && data.cod !== 200 && <p className='text-center'>No Matches for "{dataFor}"</p>)
+            <Onecall hourly={dataOnecall.hourly} daily={dataOnecall.daily}/>
+
+          </div> : (dataWeather && dataWeather.cod !== 200 && <p className='text-center'>No Matches for "{dataFor}"</p>)
       }
     </>
   );

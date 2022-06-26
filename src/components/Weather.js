@@ -21,7 +21,7 @@ export default function Weather(props) {
         <>
             <div className="C3-G1 d-flex justify-content-between flex-row my-1">
                 <div className="weather conditions d-flex flex-column justify-content-center align-items-center p-1">
-                    <img src={imgUrl} className='mb-1' alt="icon" />
+                    <img src={imgUrl} className='mb-1' style={{ color: 'white' }} alt="icon" />
                     <h3 className="d-flex condition flex-column justify-content-center align-items-center my-1">{condition}</h3>
                 </div>
 
@@ -42,7 +42,7 @@ export default function Weather(props) {
             <hr />
             <div className="d-flex rise-set justify-content-evenly my-1">
                 <div className=""><BsSunFill className='me-1' /> {setRiseTime(sunrise)}</div>
-                <div className=""><BsMoonStarsFill className='me-1'/> {setRiseTime(sunset)}</div>
+                <div className=""><BsMoonStarsFill className='me-1' /> {setRiseTime(sunset)}</div>
             </div>
         </>
     )
